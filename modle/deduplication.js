@@ -11,15 +11,15 @@ var conn = mysql.createConnection({
     database: 'douyu',
     port: 3306
 });
-var start=1;
-var isTagFinish=false;
+var start = 1;
+var isTagFinish = false;
 /**
  * @return {boolean}
  */
-exports.UpdateTag=function (tablename) {
+exports.UpdateTag = function (tablename) {
 
     var limit_range = (start - 1) * 10 + ',' + 20;
-    var userAddSql = 'SELECT * FROM '+tablename+' limit ' + limit_range + ';';
+    var userAddSql = 'SELECT * FROM ' + tablename + ' limit ' + limit_range + ';';
     conn.query(userAddSql, function (err, rows, fields) {
         if (err) {
             return console.log(err.message);
@@ -41,18 +41,23 @@ exports.UpdateTag=function (tablename) {
     }
 
 };
-myEvents.on('geted',function(tags){
-    var split = tags.split(',');
-    for(var i=0; i<split.length;i++){
-        var tag = split[i];
-        myEvents.emit('insertTag',tag);
+myEvents.on('geted', function (tags) {
+    try {
+        var split = tags.split(',');
+        for (var i = 0; i < split.length; i++) {
+            var tag = split[i];
+            myEvents.emit('insertTag', tag);
+        }
+    } catch (e) {
+        console.log(e);
     }
+
 });
-myEvents.on('insertTag',function(tag){
-    var sql='insert tags (tag) value (?)';
-    var params=[tag];
-    conn.query(sql,params,function(err,fleid){
-        if(err){
+myEvents.on('insertTag', function (tag) {
+    var sql = 'insert tags (tag) value (?)';
+    var params = [tag];
+    conn.query(sql, params, function (err, fleid) {
+        if (err) {
             return console.log(err);
         }
     });

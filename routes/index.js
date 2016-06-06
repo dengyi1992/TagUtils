@@ -16,7 +16,7 @@ router.get('/deduplication',function(req,res,next){
   }
   var tablename = req.query.tablename;
   rule.second = times;
-  for (var i = 0; i < 60; i = i + 5) {
+  for (var i = 0; i < 60; i = i + 2) {
     times.push(i);
   }
   schedule.scheduleJob(rule, function () {
